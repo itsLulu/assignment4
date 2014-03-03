@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Info windows</title>
+    <style>
+      html, body, #map-canvas {
+        height: 90%;
+        margin: 0px;
+        padding: 0px
+      }
+      .mapstyle{ 
+        -webkit-filter: grayscale(80%); 
+        -moz-filter: grayscale(80%);
+        -ms-filter: grayscale(80%);
+        filter: grayscale(80%); }
+     /* .blendingbox{height:100%; width:100%; background-color:rgba(0,0,0,0.2); position:absolute; top:0; z-index:999;}*/
+      #content{padding-left:2em;padding-bottom:1em;}
+
+      h2{font-size:4em;text-align:right; padding-right:5%;font-family: Helvetica, sans-serif;}
+
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+// This example displays a marker at the center of Australia.
+// When the user clicks the marker, an info window opens.
+
+function initialize() {
+  var myLatlng = new google.maps.LatLng(40.689441, -74.044538);
+  var mapOptions = {
+    zoom: 18,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.SATELLITE,
+    heading: 90,
+    tilt: 45
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">The Statue of Liberty</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>The Statue of Liberty</b> is a colossal neoclassical sculpture on Liberty Island in the middle of New York Harbor, in Manhattan, New York City. The statue, designed by Frédéric Auguste Bartholdi and dedicated on October 28, 1886, was a gift to the United States from the people of France. </p>'+
+      '</div>'+
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+      content: contentString
+  });
+
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Taipei City, Taiwan'
+  });
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+  });
+}
+
+function rotate90() {
+  var heading = map.getHeading() || 0;
+  map.setHeading(heading + 90);
+}
+
+function autoRotate() {
+  // Determine if we're showing aerial imagery
+  if (map.getTilt() != 0) {
+    window.setInterval(rotate90, 3000);
+  }
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div class="blendingbox"></div>
+    <div id="map-canvas" class="mapstyle"></div>
+    <h2>Google Map API experiment</h2>
+  </body>
+</html>
